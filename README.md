@@ -28,7 +28,7 @@ It’s intended as a **starting point** for developing GPS-enabled badge apps.
 
 ![GPS Hexpansion Top](Images/GPS-Top)
 ![GPS Hexpansion Bottom](Images/GPS-Bottom)
-![Badge with Hexpansion](Images/GPS-With-Badge)
+![Badge with Hexpansion](Images/IMG_1443.jpeg)
 ![Hexpansion Layout](Images/GPS-Layout)
 ---
 
