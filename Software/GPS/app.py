@@ -74,29 +74,30 @@ class L80KApp(app.App):         # pylint: disable=no-member
         return VERSION
 
 
-    async def handle_stop_app(self, event):
+    async def handle_stop_app(self, event: RequestStopAppEvent):
         """ Handle the RequestStopAppEvent so that we can release resources """
-        try:
-            if event.app == self:
-                self.deinit()
-        except (AttributeError, TypeError):
-            pass
+        if event.app == self:
+            print("GPS: stopping app")
+            self.deinit()
 
 
     async def on_resume(self, event: RequestForegroundPushEvent):
         """ Handle the RequestForegroundPushEvent to know when we gain focus """
-        print("resumed")
-        eventbus.emit(PatternDisable())
-        eventbus.on(ButtonDownEvent, self.handle_button_down, self)
-        eventbus.on(ButtonUpEvent, self.handle_button_up, self)
+        if event.app == self:
+            print("GPS: resumed")
+            eventbus.emit(PatternDisable())
+            eventbus.on(ButtonDownEvent, self.handle_button_down, self)
+            eventbus.on(ButtonUpEvent, self.handle_button_up, self)
+            self.foreground = True
 
 
     async def on_pause(self, event: RequestForegroundPopEvent):
         """ Handle the RequestForegroundPopEvent to know when we lose focus """
-        print("paused")
-        eventbus.emit(PatternEnable())
-        eventbus.remove(ButtonDownEvent, self.handle_button_down, self)
-        eventbus.remove(ButtonUpEvent, self.handle_button_up, self)
+        if event.app == self:
+            print("GPS: paused")
+            eventbus.emit(PatternEnable())
+            eventbus.remove(ButtonDownEvent, self.handle_button_down, self)
+            eventbus.remove(ButtonUpEvent, self.handle_button_up, self)
 
 
     def handle_button_down(self, event: ButtonDownEvent):
@@ -172,6 +173,7 @@ class L80KApp(app.App):         # pylint: disable=no-member
 
 
 def find_hexpansion_by_PID(pid) -> int | None:
+    """ Search for a hexpansion with the given PID and return its port number, or None if not found """
     for port in range(1, 7):
         i2c = I2C(port)
         # Autodetect eeprom addr and address length (some EEPROMs use 8-bit addressing, some use 16-bit)
@@ -185,7 +187,10 @@ def find_hexpansion_by_PID(pid) -> int | None:
             continue
         except RuntimeError:    # blank EEPROM on this port
             continue
-        except Exception:       # Error reading header - could be a non-hexpansion device or a faulty hexpansion
+        except ValueError:      # invalid header data
+            continue
+        except Exception as e:  # Error reading header - could be a non-hexpansion device or a faulty hexpansion
+            print(f"GPS:Error reading hexpansion header on port {port}: {e}")
             continue
         if hexpansion_header.pid == pid:
             return port
