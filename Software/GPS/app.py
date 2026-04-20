@@ -23,9 +23,6 @@ RX_PIN  = 0    # HS_F for RX
 RESET_PIN = 2  # HS_H for reset
 PPS_PIN = 3    # HS_I for PPS
 
-###JUST FOR USE WITH MY PROTOTYPE BOARD which needs power enabling via an LS pin
-ENABLE_PIN  = 0  # First LS pin used to enable the SMPSU
-###JUST FOR USE WITH MY PROTOTYPE BOARD which needs power enabling via an LS pin
 
 class L80KApp(app.App):         # pylint: disable=no-member
     def __init__(self, config: HexpansionConfig | None = None):
@@ -44,11 +41,7 @@ class L80KApp(app.App):         # pylint: disable=no-member
 
         self.tx_pin = self.config.pin[TX_PIN]
         self.rx_pin = self.config.pin[RX_PIN]
-###JUST FOR USE WITH MY PROTOTYPE BOARD which needs power enabling via an LS pin
-        power_control = self.config.ls_pin[ENABLE_PIN]
-        power_control.init(mode=Pin.OUT)
-        power_control.value(1)
-###JUST FOR USE WITH MY PROTOTYPE BOARD which needs power enabling via an LS pin
+
         self.button_states = Buttons(self)
         self.last_fix = None
         self.foreground = False
