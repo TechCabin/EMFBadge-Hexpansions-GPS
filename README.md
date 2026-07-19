@@ -23,6 +23,24 @@ This repository contains:
 It’s intended as a **starting point** for developing GPS-enabled badge apps.
 
 ---
+## "Failed to Read Header" Fix
+
+This error means the EEPROM has not been programmed. Follow this process to program it
+
+Step 1 - plug the badge into your computer and confirm the serial port has been initalised
+Step 2 - clone the Hexpansion firmware repo
+  git clone https://github.com/emfcamp/hexpansion-firmwares
+  you will need the path to this repo in step 6
+Step 3 - Clone the badge software 
+  git clone https://github.com/emfcamp/badge-2024-software
+  and cd into the directory
+Step 4 - Insert the GPS Hexpansion into slot 2
+Step 5 - Run this command to write the header
+  mpremote mount modules + run modules/scripts/prepare_eeprom.py
+Step 6 - Run this command to write the firmware to the EEPROM (you will need the path to the firmware repo)
+  mpremote mount modules + run modules/scripts/mount_hexpansions.py + cp {PATH TO HEXPANSION FIRMWARE}/0x7cab/0xBEAC/app.mpy :/hexpansion_2/app.mpy
+Step 7 - reboop your badge, it should then recognise the GPS Hexpansion
+---
 
 ## 🖼️ Hardware
 
