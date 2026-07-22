@@ -41,7 +41,7 @@ Step 3 - Clone the badge software
   
 Step 4 - Insert the GPS Hexpansion into slot 2.
 
-Step 5 - Edit modules/scripts/prepare_eeprom.py, on replace the VID/PID in the header for the m24C16 section to read: `vid=0x7cab` `pid=0xbeac`, save the changes
+Step 5 - Edit modules/scripts/prepare_eeprom.py, and replace the VID/PID in the header for the m24C16 section to read: `vid=0x7cab` `pid=0xbeac`, save the changes
 
 Step 6 - Run this command to write the header
   
