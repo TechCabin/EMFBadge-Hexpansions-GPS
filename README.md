@@ -41,13 +41,17 @@ Step 3 - Clone the badge software
   
 Step 4 - Insert the GPS Hexpansion into slot 2.
 
-Step 5 - Run this command to write the header
+Step 5 - Edit modules/scripts/prepare_eeprom.py, and replace the VID/PID in the header for the m24C16 section to read: `vid=0x7cab` `pid=0xbeac`, save the changes
+
+Step 6 - Run this command to write the header
   
   mpremote mount modules + run modules/scripts/prepare_eeprom.py
   
-Step 6 - Run this command to write the firmware to the EEPROM (you will need the path to the firmware repo)
+Step 6a - Run this command to write the firmware to the EEPROM (you will need the path to the firmware repo)
   
   mpremote mount modules + run modules/scripts/mount_hexpansions.py + cp {PATH TO HEXPANSION FIRMWARE}/0x7cab/0xBEAC/app.mpy :/hexpansion_2/app.mpy
+
+Step 6b - Alternately, open the Hexspanions app on your badge, scroll to the "Configure" button just under port 2, select it (C), then select "Update firmware"
   
 Step 7 - reboop your badge, it should then recognise the GPS Hexpansion.
 
